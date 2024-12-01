@@ -23,8 +23,10 @@ fun ConverterScreen(modifier: Modifier = Modifier) {
 
     val viewModel: CurrencyViewModel = viewModel()
     val currencies = viewModel.currencies
-    val amountFrom = viewModel.amountFrom
-    val amountTo = viewModel.amountTo
+    val amountFrom by viewModel.amountFrom
+    val amountTo by viewModel.amountTo
+    val fromCurrency by viewModel.fromCurrency
+    val toCurrency by viewModel.toCurrency
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -34,9 +36,13 @@ fun ConverterScreen(modifier: Modifier = Modifier) {
 
         CurrencyInputField(
             currencies = currencies,
-            text = amountFrom,
-            onValueChange = {
-                viewModel.convert(it)
+            amount = amountFrom,
+            currency = fromCurrency,
+            onAmountChange = {
+                viewModel.setAmountFrom(it)
+            },
+            onCurrencyChange = {
+                viewModel.setFromCurrency(it)
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -47,8 +53,12 @@ fun ConverterScreen(modifier: Modifier = Modifier) {
 
         CurrencyInputField(
             currencies = currencies,
-            text = amountTo,
-            onValueChange = {},
+            amount = amountTo,
+            currency = toCurrency,
+            onAmountChange = {},
+            onCurrencyChange = {
+                viewModel.setToCurrency(it)
+            },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp)

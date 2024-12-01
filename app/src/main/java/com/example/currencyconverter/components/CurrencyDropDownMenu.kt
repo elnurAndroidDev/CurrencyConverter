@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +22,17 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CurrencyDropDownMenu(
     currencies: List<String>,
+    selectedCurrency: String,
     onSelectionChange: (String) -> Unit
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(currencies.firstOrNull() ?: "") }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = it }
     ) {
         TextField(
-            value = selectedOption,
+            value = selectedCurrency,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -56,9 +57,8 @@ fun CurrencyDropDownMenu(
                 DropdownMenuItem(
                     text = { Text(text = item) },
                     onClick = {
-                        selectedOption = item
-                        isExpanded = false
                         onSelectionChange(item)
+                        isExpanded = false
                     }
                 )
             }
@@ -85,6 +85,6 @@ private fun CurrencyDropDownMenuPreview() {
             "SGD",
             "ZAR"
         ),
-        onSelectionChange = {}
+        onSelectionChange = {}, selectedCurrency = "USD"
     )
 }
